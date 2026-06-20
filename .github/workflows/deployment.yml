@@ -1,0 +1,30 @@
+name: CICD Pipeline #Name of the Workflow
+
+on:
+  push: #Runs Workflow, Whenever Code is Pushed to Main Branch in Repository
+    branches:
+    - main
+
+jobs: #One or More Jobs to be Executed as part of a Workflow
+
+  build: #Build is the Job Name Which is a Label Used to Identify the Job Within the Workflow
+
+    runs-on: ubuntu-latest #Run Build Job on Latest Available Ubuntu Runner Provided by GitHub
+
+    steps: #Steps is a Section Inside a Job That Contains Individual Tasks to be Executed
+
+      - name: Checkout Repository #Clones GitHub Repository Onto the Runner Virtual Machine
+        uses: actions/checkout@v4 #Pre-Built Action Provided by GitHub to Checkout Repository on the Runner Virtual Machine
+
+      - name: Setup Java
+        uses: actions/setup-java@v4 #Pre-Built Action Provided by GitHub to Setup Java Environment on the Runner Virtual Machine
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Build Maven Project #GitHub Hosted Runners Come With Maven Pre-Installed
+        run: mvn clean package
+
+      - name: Build Docker Image
+        run: docker build -t 149536451818.dkr.ecr.ap-south-1.amazonaws.com/login:${{ github.run_number }} .
+      
