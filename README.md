@@ -7,14 +7,10 @@
 
 - Checkout Code from GitHub.
 - Build Project.
-- Execute SonarQube Test.
-- Upload Build Artifact to Sonatype Nexus.
 - Build Docker Image.
 - Push Docker Image to Docker Hub Registry.
-- Remove Docker Image Locally in Jenkins.
 - Update Docker Image Tag in Kubernetes Manifest.
 - Deploy Application into Kubernetes Cluster.
-- Send CICD Pipeline Execution Status to Slack.
 
 ### Tools and Technologies used are Java, Git, GitHub, Maven, SonarQube, Sonatype Nexus, Jenkins, Docker, DockerHub, Kubernetes and Amazon Web Services.
 
