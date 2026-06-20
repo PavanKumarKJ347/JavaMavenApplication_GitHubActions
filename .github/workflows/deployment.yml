@@ -41,3 +41,4 @@ jobs: #One or More Jobs to be Executed as part of a Workflow
     - name: Push Docker Image to ECR
       run: |
         docker push 149536451818.dkr.ecr.ap-south-1.amazonaws.com/login:${{ github.run_number }}
+        
