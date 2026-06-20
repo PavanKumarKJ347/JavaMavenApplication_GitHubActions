@@ -8,9 +8,9 @@
 - Checkout Code from GitHub.
 - Build Project.
 - Build Docker Image.
-- Push Docker Image to Docker Hub Registry.
+- Push Docker Image to AWS ECR Registry.
 - Update Docker Image Tag in Kubernetes Manifest.
-- Deploy Application into Kubernetes Cluster.
+- Deploy Application into Elastic Kubernetes Cluster.
 
 ### Tools and Technologies used are Java, Git, GitHub, Maven, SonarQube, Sonatype Nexus, Jenkins, Docker, DockerHub, Kubernetes and Amazon Web Services.
 
