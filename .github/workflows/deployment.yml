@@ -13,18 +13,31 @@ jobs: #One or More Jobs to be Executed as part of a Workflow
 
     steps: #Steps is a Section Inside a Job That Contains Individual Tasks to be Executed
 
-      - name: Checkout Repository #Clones GitHub Repository Onto the Runner Virtual Machine
-        uses: actions/checkout@v4 #Pre-Built Action Provided by GitHub to Checkout Repository on the Runner Virtual Machine
+    - name: Checkout Repository #Clones GitHub Repository Onto the Runner Virtual Machine
+      uses: actions/checkout@v4 #Pre-Built Action Provided by GitHub to Checkout Repository on the Runner Virtual Machine
 
-      - name: Setup Java
-        uses: actions/setup-java@v4 #Pre-Built Action Provided by GitHub to Setup Java Environment on the Runner Virtual Machine
-        with:
-          distribution: temurin
-          java-version: '17'
+    - name: Setup Java
+      uses: actions/setup-java@v4 #Pre-Built Action Provided by GitHub to Setup Java Environment on the Runner Virtual Machine
+      with:
+        distribution: temurin
+        java-version: '17'
 
-      - name: Build Maven Project #GitHub Hosted Runners Come With Maven Pre-Installed
-        run: mvn clean package
+    - name: Build Maven Project #GitHub Hosted Runners Come With Maven Pre-Installed
+      run: mvn clean package
 
-      - name: Build Docker Image
-        run: docker build -t 149536451818.dkr.ecr.ap-south-1.amazonaws.com/login:${{ github.run_number }} .
-      
+    - name: Build Docker Image
+      run: docker build -t 149536451818.dkr.ecr.ap-south-1.amazonaws.com/login:${{ github.run_number }} .
+
+    - name: Configure AWS Credentials #Authenticates GitHub Runner With AWS
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ap-south-1
+    
+    - name: Login to Amazon ECR
+      uses: aws-actions/amazon-ecr-login@v2
+    
+    - name: Push Docker Image to ECR
+      run: |
+        docker push 149536451818.dkr.ecr.ap-south-1.amazonaws.com/login:${{ github.run_number }}
