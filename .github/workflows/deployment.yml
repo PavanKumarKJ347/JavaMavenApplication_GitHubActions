@@ -13,7 +13,7 @@ jobs: #One or More Jobs to be Executed as part of a Workflow
 
     steps: #Steps is a Section Inside a Job That Contains Individual Tasks to be Executed
 
-    - name: Checkout Repository #Clones GitHub Repository Onto the Runner Virtual Machine
+    - name: Git Checkout #Clones GitHub Repository Onto the Runner Virtual Machine
       uses: actions/checkout@v4 #Pre-Built Action Provided by GitHub to Checkout Repository on the Runner Virtual Machine
 
     - name: Setup Java
@@ -35,10 +35,10 @@ jobs: #One or More Jobs to be Executed as part of a Workflow
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: ap-south-1
     
-    - name: Login to Amazon Elastic Container Registry #Authenticates Docker Client With Amazon ECR
+    - name: Authenticate With Amazon Elastic Container Registry #Authenticates Docker Client With Amazon ECR
       uses: aws-actions/amazon-ecr-login@v2
     
-    - name: Push Docker Image to Elastic Container Registry
+    - name: Push Docker Image to Amazon Elastic Container Registry
       run: |
         docker push 149536451818.dkr.ecr.ap-south-1.amazonaws.com/login:${{ github.run_number }}
     
