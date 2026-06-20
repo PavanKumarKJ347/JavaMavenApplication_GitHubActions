@@ -9,7 +9,7 @@ jobs: #One or More Jobs to be Executed as part of a Workflow
 
   build: #Build is the Job Name Which is a Label Used to Identify the Job Within the Workflow
 
-    runs-on: ubuntu-latest #Run Build Job on Latest Available Ubuntu Runner Provided by GitHub
+    runs-on: ubuntu-latest #Run Build Job on GitHub Provided Ubuntu Runner Which Comes With Git, Maven, Docker, AWS CLI and Kubectl Etc
 
     steps: #Steps is a Section Inside a Job That Contains Individual Tasks to be Executed
 
@@ -22,7 +22,7 @@ jobs: #One or More Jobs to be Executed as part of a Workflow
         distribution: temurin
         java-version: '17'
 
-    - name: Build Maven Project #GitHub Hosted Runners Come With Maven Pre-Installed
+    - name: Build Maven Project #GitHub Hosted Runners Comes With Maven Pre-Installed
       run: mvn clean package
 
     - name: Build Docker Image
@@ -35,10 +35,22 @@ jobs: #One or More Jobs to be Executed as part of a Workflow
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: ap-south-1
     
-    - name: Login to Amazon ECR
+    - name: Login to Amazon Elastic Container Registry #Authenticates Docker Client With Amazon ECR
       uses: aws-actions/amazon-ecr-login@v2
     
-    - name: Push Docker Image to ECR
+    - name: Push Docker Image to Elastic Container Registry
       run: |
         docker push 149536451818.dkr.ecr.ap-south-1.amazonaws.com/login:${{ github.run_number }}
-        
+    
+    - name: Update Docker Image Tag in Kubernetes Manifest
+      run: |
+        sed -i "s/Build_Tag/${{ github.run_number }}/g" Deployment.yaml
+    
+    - name: Configure Kubectl for Elastic Kubernetes Cluster #GitHub Hosted Runners Comes With Kubectl Pre-Installed
+      run: |
+        aws eks update-kubeconfig --region ap-south-1 --name Amazon_Production_EKS_Cluster
+    
+    - name: Deploy Application to Elastic Kubernetes Cluster
+      run: |
+        kubectl delete deployment webpage-deployment -n production || true
+        kubectl apply -f Deployment.yaml
