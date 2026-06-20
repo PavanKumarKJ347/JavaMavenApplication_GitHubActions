@@ -23,7 +23,7 @@
 # Project Execution
 ## Git Checkout
 ```bash
-  git branch: 'main', url: 'https://github.com/DevOpsCloudAutomation/JavaDockerApplication.git'
+  git branch: 'main', url: 'https://github.com/PavanKumarKJ347/JavaMavenApplication_GitHubActions.git'
 ```
 
 ## Build Project
@@ -33,38 +33,22 @@ Build Automation Tool Maven can be used to build this project as this project is
 ```bash
   mvn clean package
 ```
-Note:  
+Note:
 Java and Maven should be installed as a prerequisite to Build Project Code.
-
-## Execute SonarQube Test
-```bash
-  mvn sonar:sonar
-```
-
-## Upload Build Artifact to Sonatype Nexus
-```bash
-  mvn deploy
-```
 
 ## Build Docker Image
 ```bash
-  docker build -t devopscloudautomation/webapplication:${buildNumber} .
+  docker build -t 149536451818.dkr.ecr.ap-south-1.amazonaws.com/login:${{ github.run_number }} .
 ```
 
 ## Push Docker Image to Docker Hub Registry
 ```bash
-  docker login -u devopscloudautomation -p ${Docker_Hub_Password}
-  docker push devopscloudautomation/webapplication:${buildNumber}
-```
-
-## Remove Docker Image Locally in Jenkins Server
-```bash
-  docker rmi -f devopscloudautomation/webapplication:${buildNumber}
+  docker push 149536451818.dkr.ecr.ap-south-1.amazonaws.com/login:${{ github.run_number }}
 ```
 
 ## Update Docker Image Tag in Kubernetes Manifest
 ```bash
-  sed -i 's/Build_Tag/${Build_Number}/g' Deployment.yaml
+  sed -i "s/Build_Tag/${{ github.run_number }}/g" Deployment.yaml
 ```
 
 ## Deploy Application to Kubernetes Cluster
